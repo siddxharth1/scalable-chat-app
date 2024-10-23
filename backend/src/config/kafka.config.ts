@@ -1,8 +1,8 @@
 import { Kafka, logLevel } from "kafkajs";
 import fs from "fs";
-
+import "dotenv/config";
 export const kafka = new Kafka({
-  brokers: ["kafka-33c1a71c-vsssiddharth-cfad.h.aivencloud.com:10952"],
+  brokers: [process.env.KAFKA_BROKER!],
 
   ssl: {
     rejectUnauthorized: true,
@@ -10,8 +10,8 @@ export const kafka = new Kafka({
   },
   sasl: {
     mechanism: "scram-sha-256",
-    username: "avnadmin",
-    password: "AVNS_kod4l0V7SsOlDdcJct7",
+    username: process.env.KAFKA_USERNAME!,
+    password: process.env.KAFKA_PASSWORD!,
   },
   logLevel: logLevel.ERROR,
 });
