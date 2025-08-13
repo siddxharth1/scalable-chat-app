@@ -12,6 +12,7 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const token = authHeader.split(" ")[1];
   jwt.verify(token, process.env.JWT_SECRET!, (err, user) => {
     if (err) {
+      console.log(err);
       res.status(401).json({ status: 401, message: "UnAuthorized" });
       return;
     }

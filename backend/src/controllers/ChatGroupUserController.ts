@@ -33,7 +33,10 @@ export const chatGroupUserStore = async (
   try {
     const body: GroupUserType = request.body;
     const user = await prisma.groupUsers.create({
-      data: body,
+      data: {
+        name: body.name,
+        group_id: body.group_id,
+      },
     });
 
     return response
