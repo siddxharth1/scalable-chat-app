@@ -4,6 +4,7 @@ export type ChatGroupType = {
   title: string;
   passcode: string;
   created_at: string;
+  users_count?: number; // added from backend aggregation
 };
 
 export type GroupChatUserType = {
@@ -20,4 +21,5 @@ export type MessageType = {
   group_id: string;
   name: string;
   created_at: string;
+  user_id?: number; // added for reliable self-identification on client
 };

@@ -38,19 +38,33 @@ export default function ChatUserDialog({
   });
 
   useEffect(() => {
+    // If the logged-in user created the group, auto close dialog (no need for name/passcode)
+    const sessionUserIdNum = Number(session?.user?.id);
+    if (!isNaN(sessionUserIdNum) && sessionUserIdNum === group.user_id) {
+      setOpen(false);
+      return;
+    }
     const data = localStorage.getItem(params["chatId"] as string);
     if (data) {
-      const jsonData = JSON.parse(data);
-      if (jsonData?.name && jsonData?.group_id) {
-        setOpen(false); // User is already part of the group
-      }
+      try {
+        const jsonData = JSON.parse(data);
+        if (jsonData?.name && jsonData?.group_id) {
+          setOpen(false); // already joined
+        }
+      } catch {}
     }
-  }, []);
+  }, [group.user_id, session?.user?.id, params, setOpen]);
   console.log("session", session);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const localData = localStorage.getItem(params["chatId"] as string);
+    const sessionUserIdNum = Number(session?.user?.id);
+    if (!isNaN(sessionUserIdNum) && sessionUserIdNum === group.user_id) {
+      // creator doesn't need to join via passcode
+      setOpen(false);
+      return;
+    }
     if (!localData) {
       try {
         const { data } = await axios.post(
@@ -86,9 +100,9 @@ export default function ChatUserDialog({
     <Dialog open={open}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add Name and Passcode</DialogTitle>
+          <DialogTitle>Join this group</DialogTitle>
           <DialogDescription>
-            Add your name and passcode to join in room
+            Enter a display name and the group passcode to join.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>

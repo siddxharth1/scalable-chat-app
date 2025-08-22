@@ -54,15 +54,23 @@ export default function GroupChatCardMenu({
       )}
 
       <DropdownMenu>
-        <DropdownMenuTrigger>
-          <DotsVerticalIcon className="h-5 w-5" />
+        <DropdownMenuTrigger className="rounded-full p-1.5 hover:bg-slate-100 transition-colors">
+          <DotsVerticalIcon className="h-5 w-5 text-slate-500" />
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem onClick={handleCopy}>Copy</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setEditDialog(true)}>
+        <DropdownMenuContent className="w-40">
+          <DropdownMenuItem onClick={handleCopy} className="cursor-pointer">
+            Copy link
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => setEditDialog(true)}
+            className="cursor-pointer"
+          >
             Edit
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setDeleteDialog(true)}>
+          <DropdownMenuItem
+            onClick={() => setDeleteDialog(true)}
+            className="text-red-600 focus:text-red-600 cursor-pointer"
+          >
             Delete
           </DropdownMenuItem>
         </DropdownMenuContent>

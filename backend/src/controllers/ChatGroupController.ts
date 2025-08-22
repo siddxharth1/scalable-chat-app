@@ -35,17 +35,23 @@ export const index = async (
     if (!user) {
       return response.status(400).json({ message: "User not authenticated" });
     }
-    const groups = await prisma.chatGroup.findMany({
-      where: {
-        user_id: user.id,
-      },
-      orderBy: {
-        created_at: "desc",
-      },
+    const groupsRaw = await prisma.chatGroup.findMany({
+      where: { user_id: user.id },
+      orderBy: { created_at: "desc" },
+      include: { _count: { select: { GroupUsers: true } } },
     });
-    response
-      .status(200)
-      .json({ message: "chat groups fetched successfully", data: groups });
+    const groups = groupsRaw.map((g) => ({
+      id: g.id,
+      user_id: g.user_id,
+      title: g.title,
+      passcode: g.passcode,
+      created_at: g.created_at,
+      users_count: g._count.GroupUsers,
+    }));
+    response.status(200).json({
+      message: "chat groups fetched successfully",
+      data: groups,
+    });
   } catch (error) {
     return response
       .status(500)
@@ -63,14 +69,27 @@ export const show = async (
     if (!user) {
       return response.status(400).json({ message: "User not authenticated" });
     }
-    const group = await prisma.chatGroup.findUnique({
-      where: {
-        id: id,
-      },
+    const g = await prisma.chatGroup.findUnique({
+      where: { id },
+      include: { _count: { select: { GroupUsers: true } } },
     });
-    response
-      .status(200)
-      .json({ message: "chat group fetched successfully", data: group });
+    if (!g) {
+      return response
+        .status(404)
+        .json({ message: "chat group not found", data: null });
+    }
+    const group = {
+      id: g.id,
+      user_id: g.user_id,
+      title: g.title,
+      passcode: g.passcode,
+      created_at: g.created_at,
+      users_count: g._count.GroupUsers,
+    };
+    response.status(200).json({
+      message: "chat group fetched successfully",
+      data: group,
+    });
   } catch (error) {
     return response
       .status(500)

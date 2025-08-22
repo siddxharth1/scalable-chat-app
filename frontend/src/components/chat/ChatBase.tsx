@@ -29,9 +29,9 @@ const ChatBase = ({
   }, [group.id]);
 
   return (
-    <div className="flex">
+    <div className="flex h-screen w-full bg-white dark:bg-slate-900">
       <ChatSidebar users={users} />
-      <div className="w-full md:w-4/5">
+      <div className="flex flex-col flex-1">
         {open ? (
           <ChatUserDialog
             open={open}
@@ -40,7 +40,7 @@ const ChatBase = ({
             session={session}
           />
         ) : (
-          <ChatNav chatGroup={group} users={users} />
+          <ChatNav chatGroup={group} users={users} user={chatUser} />
         )}
         <Chats group={group} chatUser={chatUser} oldMessages={oldMessages} />
       </div>
