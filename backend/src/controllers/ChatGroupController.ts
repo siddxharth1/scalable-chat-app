@@ -36,7 +36,7 @@ export const index = async (
       return response.status(400).json({ message: "User not authenticated" });
     }
     const groupsRaw = await prisma.chatGroup.findMany({
-      where: { user_id: user.id },
+      // where: { user_id: user.id },
       orderBy: { created_at: "desc" },
       include: { _count: { select: { GroupUsers: true } } },
     });

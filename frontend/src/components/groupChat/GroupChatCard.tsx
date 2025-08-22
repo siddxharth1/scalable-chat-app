@@ -6,6 +6,7 @@ import { ChatGroupType } from "../../../types";
 import Link from "next/link";
 import Env from "@/lib/env";
 import { LockClosedIcon } from "@radix-ui/react-icons";
+import JoinAndOpenGroup from "./JoinAndOpenGroup";
 
 export default function GroupChatCard({
   group,
@@ -41,12 +42,7 @@ export default function GroupChatCard({
         <p className="text-xs text-slate-500">
           Created {new Date(group.created_at).toLocaleDateString()}
         </p>
-        <Link
-          href={`${Env.APP_URL}/chat/${group.id}`}
-          className="inline-flex items-center text-xs font-medium px-3 py-1 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors"
-        >
-          Open Chat
-        </Link>
+        <JoinAndOpenGroup group={group} user={user} />
       </CardContent>
     </Card>
   );
